@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script defer src="script.js"> </script>
+    <meta charset="utf8"> </meta>
+    <title> Breakfast </title>
+    <style>
+      body {
+        font-family: Helvetica Neue, Arial, sans-serif;
+      }
+      #myDiv, button {
+        font-size: 150%;
+      }
+      input {
+        font-size: 125%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="myDiv">
+      <p>
+        <!-- Text input: what is their name? -->
+        <label for='name'> Name </label>
+        <input id='name' name='name' type='text' />
+        <br /> <br />
+        <!-- Radio input: true/false -->
+        I ate breakfast today. <br />
+        <input id='yesBreakfast' name='breakfastToday' type='radio' />
+        <label for='yesBreakfast'> True </label> <br />
+        <input id='noBreakfast' name='breakfastToday' type='radio' />
+        <label for='noBreakfast'> False </label> <br />
+        <br /> <br />
+        <!-- Checkbox input: what breakfast do they enjoy? -->
+        When I eat breakfast, I normally eat... <br />
+        <input type="checkbox" id="eggs" name="breakfast" value="eggs">
+        <label for="eggs"> Eggs </label> <br />
+        <input type="checkbox" id="pancakes" name="breakfast" value="pancakes">
+        <label for="pancakes"> Pancakes </label> <br />
+        <input type="checkbox" id="waffles" name="breakfast" value="waffles">
+        <label for="waffles"> Waffles </label> <br />
+        <input type="checkbox" id="cereal" name="breakfast" value="cereal">
+        <label for="cereal"> Cereal </label> <br />
+        <input type="checkbox" id="fruit" name="breakfast" value="fruit">
+        <label for="fruit"> Fruit </label> <br />
+        <input type="checkbox" id="other" name="breakfast" value="other">
+        <label for="other"> Other/I don't eat breakfast </label> <br />
+      </p>
+      <button onclick='display()'>Click here for results!</button>
+    </div>
+  </body>
+</html>
