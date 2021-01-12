@@ -2,6 +2,7 @@
 function display() {
   // Get the values that were input into the two text boxes.
   var name = document.getElementById('name').value;
+  localStorage.setItem("name", name);
   // You only need to know one value to know both for the radios being checked.
   var ateBreakfast = document.getElementById('yesBreakfast').checked;
   // Check each item on the list of possible breakfasts
