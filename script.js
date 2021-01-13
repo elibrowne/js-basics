@@ -62,8 +62,18 @@ function display(data, replace) {
       myDiv.innerHTML += "\t\t\t<li> " + data.name + " eats " + food[0] + " for breakfast sometimes. </li>\n";
     }
   }
-  // TODO add "see past answers" when there was a replacement
+  myDiv.innerHTML += "\t\t</ul>\n\t\t<br />\n"; // close the unordered list
+  // Add "see past answers" when there was a replacement of all the page content
   if (replace) {
     // TODO add button, call "add past responses" 
+    myDiv.innerHTML += "\t\t\t<button onclick='displayPast()'>See past responses.</button>\n";
+  }
+}
+
+function displayPast() {
+  var userData = localStorage.getItem("data").data;
+  // CURRENT ERROR IS HERE :(
+  for (var i = 0; i < userData.length() - 1; i++) { // subtract 1 because the most recent one has already been displayed
+    display(userData[i], false);
   }
 }
