@@ -71,9 +71,12 @@ function display(data, replace) {
 }
 
 function displayPast() {
-  var userData = localStorage.getItem("data").data;
+  console.log(localStorage.getItem("data"));
+  console.log(JSON.parse(localStorage.getItem("data"))); // undefined
+  var userData = JSON.parse(localStorage.getItem("data")).data;
+  console.log(userData);
   // CURRENT ERROR IS HERE :(
-  for (var i = 0; i < userData.length() - 1; i++) { // subtract 1 because the most recent one has already been displayed
+  for (var i = 0; i < userData.length - 1; i++) { // subtract 1 because the most recent one has already been displayed
     display(userData[i], false);
   }
 }
