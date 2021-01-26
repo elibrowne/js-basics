@@ -37,46 +37,82 @@ function storeData() {
 // Display method runs to display the information on screen
 // Parameters: list of data to use (one day), whether or not to replace all the window or just to append (boolean)
 function display(data, replace) {
-  // Debugging: making sure that the data is corerct
-  console.log(data);
+  var targetDiv; // used to determine where the editing occurs
   if (replace) {
-    myDiv.innerHTML = "\n"; // replace the div tag's contents
+    targetDiv = myDiv;
+    myDiv.innerHTML = "\n"; // empty the div
   } else {
-    myDiv.innerHTML += "\n"; // just add a new line
+    targetDiv = resultsBox;
   }
   // Add the time of submission
-  myDiv.innerHTML += "\t\t<p> Time of submission: " + data.date + " </p>\n";
+  targetDiv.innerHTML += "\t\t<p> Time of submission: " + data.date + " </p>\n";
   // Check if they checked off that they did eat breakfast
   if (data.ateBreakfast) {
-    myDiv.innerHTML += "\t\t<h1> " + data.name + " did eat breakfast today. </h1>\n";
+    targetDiv.innerHTML += "\t\t<h1> " + data.name + " did eat breakfast today. </h1>\n";
   } // just assume false/blank = no breakfast
   else {
-    myDiv.innerHTML += "\t\t<h1> " + data.name + " did not eat breakfast today. </h1>\n";
+    targetDiv.innerHTML += "\t\t<h1> " + data.name + " did not eat breakfast today. </h1>\n";
   }
   // Add in a list of things that they eat.
-  myDiv.innerHTML += "\t\t<p> Some of the things that " + data.name + " likes to eat for breakfast are... </p>\n";
-  myDiv.innerHTML += "\t\t<ul>\n";
+  targetDiv.innerHTML += "\t\t<p> Some of the things that " + data.name + " likes to eat for breakfast are... </p>\n";
+  targetDiv.innerHTML += "\t\t<ul>\n";
   // Go over each checkbox and see if it is eaten
   for (var food of data.frequentlyEats) {
     if (food[1]) {
-      myDiv.innerHTML += "\t\t\t<li> " + data.name + " eats " + food[0] + " for breakfast sometimes. </li>\n";
+      targetDiv.innerHTML += "\t\t\t<li> " + data.name + " eats " + food[0] + " for breakfast sometimes. </li>\n";
     }
   }
-  myDiv.innerHTML += "\t\t</ul>\n\t\t<br />\n"; // close the unordered list
+  targetDiv.innerHTML += "\t\t</ul>\n\t\t<br />\n"; // close the unordered list
   // Add "see past answers" when there was a replacement of all the page content
   if (replace) {
-    // TODO add button, call "add past responses" 
-    myDiv.innerHTML += "\t\t\t<button onclick='displayPast()'>See past responses.</button>\n";
+    // Add search bars and the ability for the user to pick certain types of data from the overall list
+    targetDiv.innerHTML += "\t\t\t<hr />Search your previous answers! Enter in no fields, one field, or both. <br />\n";
+    targetDiv.innerHTML += "\t\t\tEnter a name to look for: <input id='nameSearch'></input> <br />\n";
+    targetDiv.innerHTML += "\t\t\tEnter a date to look for (mm-dd-yy, ie 1-1-2021): <input id='dateSearch'></input> <br />\n";
+    targetDiv.innerHTML += "\t\t\t<button onclick='displayPast()'> Search your past responses. </button>\n";
   }
 }
 
 function displayPast() {
-  console.log(localStorage.getItem("data"));
-  console.log(JSON.parse(localStorage.getItem("data"))); // undefined
+  console.log("Displaying...");
+  resultsBox.innerHTML = "\n"; // a new search - empty the search box
   var userData = JSON.parse(localStorage.getItem("data")).data;
-  console.log(userData);
-  // CURRENT ERROR IS HERE :(
-  for (var i = 0; i < userData.length - 1; i++) { // subtract 1 because the most recent one has already been displayed
-    display(userData[i], false);
+  // Run this loop if both conditions are specified
+  if (document.getElementById('nameSearch').value != '' && document.getElementById('dateSearch').value != '') {
+    console.log("Wanted date and name");
+    var desiredName = document.getElementById('nameSearch').value;
+    var desiredDate = document.getElementById('nameSearch').value;
+    // Run this loop if no conditions are specified: display all the data
+    for (var i = 0; i < userData.length; i++) {
+      if (userData[i].name == desiredName && userData[i].date == desiredDate) {
+        display(userData[i], false);
+      }
+    }
+  }
+  else if (document.getElementById('nameSearch').value != '') { // only search for the name, the date was empty
+    var desiredName = document.getElementById('nameSearch').value;
+    console.log("Wanted name");
+    // Run this loop if no conditions are specified: display all the data
+    for (var i = 0; i < userData.length; i++) {
+      if (userData[i].name == desiredName) {
+        display(userData[i], false);
+      }
+    }
+  }
+  else if (document.getElementById('dateSearch').value != '') { // only search for the date, the name was empty 
+    console.log("Wanted date");
+    var desiredDate = document.getElementById('dateSearch').value;
+    // Run this loop if no conditions are specified: display all the data
+    for (var i = 0; i < userData.length; i++) { 
+      if (userData[i].date == desiredDate) {
+        display(userData[i], false);
+      }
+    }
+  }
+  else { 
+    // Run this loop if no conditions are specified: display all the data
+    for (var i = 0; i < userData.length - 1; i++) { // subtract 1 because the most recent one has already been displayed
+      display(userData[i], false);
+    }
   }
 }
