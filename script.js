@@ -1,10 +1,10 @@
 // Storage method stores the information from the user after they input it
 function storeData() {
-  // I'm collecting all the checkboxes in one list, and then I'll access this list
-  // when making the data structure.
-  var checkboxes = document.getElementsByName("breakfast"); // the elements clear later so it's necessary to create a separate list
+  // The elements clear later, so one has to store their information before it's too late.
+  var checkboxes = document.getElementsByName("breakfast"); 
   var dateString = (new Date().getMonth() + 1) + "-" + new Date().getDate() + "-" + new Date().getFullYear();
-  // Here is the JSON that I'll be using.
+
+  // Create a JSON object for the day's responses
   var userResponses = {
     'name': document.getElementById('name').value,
     'ateBreakfast': document.getElementById('yesBreakfast').checked,
@@ -18,16 +18,19 @@ function storeData() {
       ["something else", checkboxes[5].checked] 
     ]
   };
-  // Now, replace the window with the new data
-  display(userResponses, true); // true is to replace, false is to append
+
+  // Now, replace the window with the new data (true to replace all contents)
+  display(userResponses, true); 
   // Add to the localStorage data
   var tempList = localStorage.getItem('data');
+
   // If the data is empty, change it to a JSON object before adding to it.
+  // This is to make sure that it works even when localStorage is empty.
   if (tempList == null || tempList == "{}") {
     tempList = "{\"data\":[]}";
   }
-  console.log(tempList);
   tempList = JSON.parse(tempList);
+
   // Add userResponses to the data section
   tempList.data.push(userResponses);
   // Add back to localStorage with the new values added
@@ -44,6 +47,7 @@ function display(data, replace) {
   } else {
     targetDiv = resultsBox;
   }
+  
   // Add the time of submission
   targetDiv.innerHTML += "\t\t<p> Time of submission: " + data.date + " </p>\n";
   // Check if they checked off that they did eat breakfast
@@ -63,55 +67,60 @@ function display(data, replace) {
     }
   }
   targetDiv.innerHTML += "\t\t</ul>\n\t\t<br />\n"; // close the unordered list
+
   // Add "see past answers" when there was a replacement of all the page content
+  // This method is also used to add new data, and we don't need a new search 
   if (replace) {
     // Add search bars and the ability for the user to pick certain types of data from the overall list
-    targetDiv.innerHTML += "\t\t\t<hr />Search your previous answers! Enter in no fields, one field, or both. <br />\n";
+    targetDiv.innerHTML += "\t\t\t<hr />\n";
+    targetDiv.innerHTML += "\t\t\t<h2> Search your previous answers! Enter in no fields, one field, or both. </h2>\n";
+    targetDiv.innerHTML += "\t\t\t<p> If you don't enter anything in a field, it won't be considered. Leave both fields empty to see every result.\n";
     targetDiv.innerHTML += "\t\t\tEnter a name to look for: <input id='nameSearch'></input> <br />\n";
-    targetDiv.innerHTML += "\t\t\tEnter a date to look for (mm-dd-yy, ie 1-1-2021): <input id='dateSearch'></input> <br />\n";
-    targetDiv.innerHTML += "\t\t\t<button onclick='displayPast()'> Search your past responses. </button>\n";
+    targetDiv.innerHTML += "\t\t\tEnter a date to look for (m-d-yyyy, ie 1-1-2021): <input id='dateSearch'></input> <br /> <br />\n";
+    targetDiv.innerHTML += "\t\t\t<button onclick='displaySearchResults()'> Search your past responses. </button>\n";
   }
 }
 
-function displayPast() {
-  console.log("Displaying...");
-  resultsBox.innerHTML = "\n"; // a new search - empty the search box
+function displaySearchResults() {
+  resultsBox.innerHTML = "\n"; // a new search - empty the search results box
   var userData = JSON.parse(localStorage.getItem("data")).data;
-  // Run this loop if both conditions are specified
-  if (document.getElementById('nameSearch').value != '' && document.getElementById('dateSearch').value != '') {
+  // Variables to store user inputs for easy accessibility 
+  var desiredName = document.getElementById('nameSearch').value;
+  var desiredDate = document.getElementById('dateSearch').value;
+
+  // Different searches need to be ran when different search terms are used --
+  // here, leaving a field empty means that it isn't searched for.
+  // Search for both name and date
+  if (desiredName != '' && desiredDate != '') {
     console.log("Wanted date and name");
-    var desiredName = document.getElementById('nameSearch').value;
-    var desiredDate = document.getElementById('nameSearch').value;
-    // Run this loop if no conditions are specified: display all the data
     for (var i = 0; i < userData.length; i++) {
       if (userData[i].name == desiredName && userData[i].date == desiredDate) {
         display(userData[i], false);
       }
     }
   }
-  else if (document.getElementById('nameSearch').value != '') { // only search for the name, the date was empty
+  // Only search for the name; the date was empty
+  else if (desiredName != '') { 
     var desiredName = document.getElementById('nameSearch').value;
     console.log("Wanted name");
-    // Run this loop if no conditions are specified: display all the data
     for (var i = 0; i < userData.length; i++) {
       if (userData[i].name == desiredName) {
         display(userData[i], false);
       }
     }
   }
-  else if (document.getElementById('dateSearch').value != '') { // only search for the date, the name was empty 
+  // Only search for the date; the name was empty
+  else if (desiredDate != '') { 
     console.log("Wanted date");
-    var desiredDate = document.getElementById('dateSearch').value;
-    // Run this loop if no conditions are specified: display all the data
     for (var i = 0; i < userData.length; i++) { 
       if (userData[i].date == desiredDate) {
         display(userData[i], false);
       }
     }
   }
+  // When the user doesn't apply any search terms, just display everything.
   else { 
-    // Run this loop if no conditions are specified: display all the data
-    for (var i = 0; i < userData.length - 1; i++) { // subtract 1 because the most recent one has already been displayed
+    for (var i = 0; i < userData.length; i++) { 
       display(userData[i], false);
     }
   }
