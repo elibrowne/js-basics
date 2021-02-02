@@ -49,8 +49,6 @@ function display(data, replace) {
     targetDiv = resultsBox;
   }
   
-  // Add the time of submission
-  targetDiv.innerHTML += "\t\t<p> Time of submission: " + data.date + " </p>\n";
   // Check if they checked off that they did eat breakfast
   if (data.ateBreakfast) {
     targetDiv.innerHTML += "\t\t<h1> " + data.name + " did eat breakfast today. </h1>\n";
@@ -58,8 +56,9 @@ function display(data, replace) {
   else {
     targetDiv.innerHTML += "\t\t<h1> " + data.name + " did not eat breakfast today. </h1>\n";
   }
+  // Add the time of submission
+  targetDiv.innerHTML += "\t\t<p> Time of submission: " + data.date + " </p>\n";
   // Add in a list of things that they eat.
-  targetDiv.innerHTML += "\t\t<p> Some of the things that " + data.name + " likes to eat for breakfast are... </p>\n";
   targetDiv.innerHTML += "\t\t<ul>\n";
   // Go over each checkbox and see if it is eaten
   for (var food of data.frequentlyEats) {
