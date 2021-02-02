@@ -11,11 +11,12 @@ function storeData() {
     'date': dateString,
     'frequentlyEats': [
       ["eggs", checkboxes[0].checked], 
-      ["pancakes", checkboxes[1].checked], 
-      ["waffles", checkboxes[2].checked], 
+      ["pancakes or waffles", checkboxes[1].checked], 
+      ["bacon or sausage", checkboxes[2].checked], 
       ["cereal", checkboxes[3].checked], 
       ["fruit", checkboxes[4].checked], 
-      ["something else", checkboxes[5].checked] 
+      ["something else", checkboxes[5].checked],
+      ["nothing", checkboxes[6].checked]
     ]
   };
 
@@ -63,7 +64,7 @@ function display(data, replace) {
   // Go over each checkbox and see if it is eaten
   for (var food of data.frequentlyEats) {
     if (food[1]) {
-      targetDiv.innerHTML += "\t\t\t<li> " + data.name + " eats " + food[0] + " for breakfast sometimes. </li>\n";
+      targetDiv.innerHTML += "\t\t\t<li> " + data.name + " ate " + food[0] + " for breakfast today. </li>\n";
     }
   }
   targetDiv.innerHTML += "\t\t</ul>\n\t\t<br />\n"; // close the unordered list
@@ -77,7 +78,7 @@ function display(data, replace) {
     targetDiv.innerHTML += "\t\t\t<p> If you don't enter anything in a field, it won't be considered. Leave both fields empty to see every result.\n";
     targetDiv.innerHTML += "\t\t\tEnter a name to look for: <input id='nameSearch'></input> <br />\n";
     targetDiv.innerHTML += "\t\t\tEnter a date to look for (m-d-yyyy, ie 1-1-2021): <input id='dateSearch'></input> <br /> <br />\n";
-    targetDiv.innerHTML += "\t\t\t<button onclick='displaySearchResults()'> Search your past responses. </button>\n";
+    targetDiv.innerHTML += "\t\t\t<button onclick='displaySearchResults()'> Search your past responses. </button> <br /> <hr />\n";
   }
 }
 
