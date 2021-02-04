@@ -4,6 +4,15 @@ function storeData() {
   var checkboxes = document.getElementsByName("breakfast"); 
   var dateString = (new Date().getMonth() + 1) + "-" + new Date().getDate() + "-" + new Date().getFullYear();
 
+  // (Try to) parse the calories value before storing.
+  var calories = document.getElementById("calories").value;
+  calories = parseInt(calories); // attempt to parse
+  if (isNaN(calories)) {
+    // parseInt() returns NaN when the input was not a valid number.
+    alert("That wasn't a valid numeric input, so no value was recorded for this day.");
+    calories = "Unknown"; // this will show up for the calories field
+  }
+
   // Create a JSON object for the day's responses
   var userResponses = {
     'name': document.getElementById('name').value,
@@ -17,7 +26,8 @@ function storeData() {
       ["fruit", checkboxes[4].checked], 
       ["something else", checkboxes[5].checked],
       ["nothing", checkboxes[6].checked]
-    ]
+    ],
+    'calories': calories
   };
 
   // Now, replace the window with the new data (true to replace all contents)
@@ -58,6 +68,8 @@ function display(data, replace) {
   }
   // Add the time of submission
   targetDiv.innerHTML += "\t\t<p> Time of submission: " + data.date + " </p>\n";
+  // Add in the calorie value of the meal. 
+  targetDiv.innerHTML += "\t\t<p> Calories: " + data.calories + " </p>\n";
   // Add in a list of things that they eat.
   targetDiv.innerHTML += "\t\t<ul>\n";
   // Go over each checkbox and see if it is eaten
@@ -87,6 +99,9 @@ function displaySearchResults() {
   // Variables to store user inputs for easy accessibility 
   var desiredName = document.getElementById('nameSearch').value;
   var desiredDate = document.getElementById('dateSearch').value;
+  // Variables to determine the average calorie consumption
+  var totalCalories = 0; // numerator of average
+  var countedMeals = 0; // denominator of average
 
   // Different searches need to be ran when different search terms are used --
   // here, leaving a field empty means that it isn't searched for.
@@ -96,6 +111,10 @@ function displaySearchResults() {
     for (var i = 0; i < userData.length; i++) {
       if (userData[i].name == desiredName && userData[i].date == desiredDate) {
         display(userData[i], false);
+        if (userData[i].calories != "Unknown") {
+          totalCalories += userData[i].calories;
+          countedMeals++;
+        }
       }
     }
   }
@@ -106,6 +125,10 @@ function displaySearchResults() {
     for (var i = 0; i < userData.length; i++) {
       if (userData[i].name == desiredName) {
         display(userData[i], false);
+        if (userData[i].calories != "Unknown") {
+          totalCalories += userData[i].calories;
+          countedMeals++;
+        }
       }
     }
   }
@@ -115,6 +138,10 @@ function displaySearchResults() {
     for (var i = 0; i < userData.length; i++) { 
       if (userData[i].date == desiredDate) {
         display(userData[i], false);
+        if (userData[i].calories != "Unknown") {
+          totalCalories += userData[i].calories;
+          countedMeals++;
+        }
       }
     }
   }
@@ -122,6 +149,14 @@ function displaySearchResults() {
   else { 
     for (var i = 0; i < userData.length; i++) { 
       display(userData[i], false);
+      if (userData[i].calories != "Unknown") {
+        totalCalories += userData[i].calories;
+        countedMeals++;
+      }
     }
   }
+
+  // Calculate the average calorie value. 
+  var averageCalories = totalCalories / countedMeals;
+  resultsBox.innerHTML += "<em> Average calories for this search: " + averageCalories + " </em>";
 }
