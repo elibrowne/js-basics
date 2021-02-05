@@ -12,13 +12,14 @@ function storeData() {
   calories = parseInt(calories); // attempt to parse
   if (isNaN(calories)) {
     // parseInt() returns NaN when the input was not a valid number.
-    alert("That wasn't a valid numeric input, so no value was recorded for this day.");
     calories = "Unknown"; // this will show up for the calories field
   }
 
   // Create a JSON object for the day's responses
   var userResponses = {
-    'name': document.getElementById('name').value,
+    // If they leave the name field blank, set it to "Unknown" instead of an empty string
+    'name': (document.getElementById('name').value == "" ? "Unknown" : document.getElementById("name").value), 
+    // If they leave this true/false blank, it'll be false.
     'ateBreakfast': document.getElementById('yesBreakfast').checked,
     'date': dateString,
     'frequentlyEats': [
@@ -175,6 +176,8 @@ function displaySearchResults() {
     resultsBox.innerHTML += "<em> Average calories for this search: " + averageCalories + " </em>";
   }
   else {
+    // If no meals were counted, either there were no search results or none of
+    // them had associated calorie values. 
     resultsBox.innerHTML += "<em> There was no calorie data for these search results :( </em>"
   }
 }
