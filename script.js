@@ -22,7 +22,7 @@ function storeData() {
     // If they leave this true/false blank, it'll be false.
     'ateBreakfast': document.getElementById('yesBreakfast').checked,
     'date': dateString,
-    'frequentlyEats': [
+    'ate': [
       ["eggs", checkboxes[0].checked], 
       ["pancakes or waffles", checkboxes[1].checked], 
       ["bacon or sausage", checkboxes[2].checked], 
@@ -33,6 +33,18 @@ function storeData() {
     ],
     'calories': calories
   };
+
+  // Check if no checkboxes were filled at all. 
+  var FOUND_TRUE = false; // boolean flag
+  for (var checkbox of checkboxes) {
+    if (checkbox.checked) { 
+      FOUND_TRUE = true;
+    }
+  }
+  // If no checkboxes were filled in, assume the user meant to say "nothing."
+  if (!FOUND_TRUE) {
+    userResponses.ate[6][1] = true; // set the "nothing" value to true
+  }
 
   // Now, replace the window with the new data (true to replace all contents)
   display(userResponses, true); 
@@ -81,7 +93,7 @@ function display(data, replace) {
   // Add in a list of things that they eat.
   targetDiv.innerHTML += "\t\t<ul>\n";
   // Go over each checkbox and see if it is eaten
-  for (var food of data.frequentlyEats) {
+  for (var food of data.ate) {
     if (food[1]) {
       targetDiv.innerHTML += "\t\t\t<li> " + data.name + " ate " + food[0] + " for breakfast today. </li>\n";
     }
