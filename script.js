@@ -1,5 +1,8 @@
-// Storage method stores the information from the user after they input it
 function storeData() {
+  // PURPOSE: Store the user's data after they submit their information.
+  // PARAMETERS: None, uses the data from the inputs on the webpage.
+  // RETURNS: None, but calls the display() method and sets localStorage.
+
   // The elements clear later, so one has to store their information before it's too late.
   var checkboxes = document.getElementsByName("breakfast"); 
   var dateString = (new Date().getMonth() + 1) + "-" + new Date().getDate() + "-" + new Date().getFullYear();
@@ -48,9 +51,13 @@ function storeData() {
   localStorage.setItem('data', JSON.stringify(tempList));
 }
 
-// Display method runs to display the information on screen
-// Parameters: list of data to use (one day), whether or not to replace all the window or just to append (boolean)
 function display(data, replace) {
+  // PURPOSE: Display one set of data on the screen.
+  // PARAMETERS: data (JSON object) -- the data to display, replace (boolean) -
+  // whether or not the webpage should replace all of the contents, like when the
+  // submit button is clicked, or just add, like when displaying search results.
+  // RETURNS: Nothing, but displays information on the screen.
+
   var targetDiv; // used to determine where the editing occurs
   if (replace) {
     targetDiv = myDiv;
@@ -94,8 +101,14 @@ function display(data, replace) {
 }
 
 function displaySearchResults() {
+  // PURPOSE: Using search results, run the display() method to show the data
+  // that matches the criterias specified by the user.
+  // PARAMETERS: None, but it uses their inputs in the search area.
+  // RETURNS: None, but it leads to results displaying. 
+
   resultsBox.innerHTML = "\n"; // a new search - empty the search results box
   var userData = JSON.parse(localStorage.getItem("data")).data;
+  
   // Variables to store user inputs for easy accessibility 
   var desiredName = document.getElementById('nameSearch').value;
   var desiredDate = document.getElementById('dateSearch').value;
@@ -157,6 +170,11 @@ function displaySearchResults() {
   }
 
   // Calculate the average calorie value. 
-  var averageCalories = totalCalories / countedMeals;
-  resultsBox.innerHTML += "<em> Average calories for this search: " + averageCalories + " </em>";
+  if (countedMeals != 0) { // No division by zero
+    var averageCalories = totalCalories / countedMeals; 
+    resultsBox.innerHTML += "<em> Average calories for this search: " + averageCalories + " </em>";
+  }
+  else {
+    resultsBox.innerHTML += "<em> There was no calorie data for these search results :( </em>"
+  }
 }
